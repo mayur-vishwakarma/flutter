@@ -40,27 +40,28 @@ class _MyHomePageState extends State<MyHomePage> {
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
           title: const Text("Age Calculator"),
         ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            ElevatedButton(
-                onPressed: () {
-                  f1();
-                },
-                child: const Text("Select Date of Birth")),
-            const SizedBox(
-              height: 50,
-            ),
-            const Text("you are - ",
-                style: TextStyle(
-                  fontSize: 25,
-                )),
-            Text("$year1  -  $month1  -  $days1",
-                style: const TextStyle(
-                  fontSize: 25,
-                ))
-          ],
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                  onPressed: () {
+                    f1();
+                  },
+                  child: const Text("Select Date of Birth")),
+              const SizedBox(
+                height: 50,
+              ),
+              const Text("you are - ",
+                  style: TextStyle(
+                    fontSize: 25,
+                  )),
+              Text("$year1  -  $month1  -  $days1",
+                  style: const TextStyle(
+                    fontSize: 25,
+                  ))
+            ],
+          ),
         ));
   }
 
