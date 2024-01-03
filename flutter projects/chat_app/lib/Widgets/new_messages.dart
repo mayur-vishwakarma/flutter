@@ -13,6 +13,7 @@ class NewMessage extends StatefulWidget {
 
 class _NewMessageState extends State<NewMessage> {
   final _messageController = TextEditingController();
+
   @override
   void dispose() {
     _messageController.dispose();
@@ -24,15 +25,17 @@ class _NewMessageState extends State<NewMessage> {
     if (enteredMessage.trim().isEmpty) {
       return;
     }
+
     FocusScope.of(context).unfocus();
     _messageController.clear();
+
     final user = FirebaseAuth.instance.currentUser!;
     final userData = await FirebaseFirestore.instance
         .collection('users')
         .doc(user.uid)
         .get();
 
-    FirebaseFirestore.instance.collection("chat").add({
+    FirebaseFirestore.instance.collection('chat').add({
       'text': enteredMessage,
       'createdAt': Timestamp.now(),
       'userId': user.uid,
@@ -47,7 +50,7 @@ class _NewMessageState extends State<NewMessage> {
       padding: const EdgeInsets.only(
         left: 15,
         right: 1,
-        bottom: 14,
+        bottom: 12,
       ),
       child: Row(
         children: [
@@ -57,15 +60,15 @@ class _NewMessageState extends State<NewMessage> {
               textCapitalization: TextCapitalization.sentences,
               autocorrect: true,
               enableSuggestions: true,
-              decoration: const InputDecoration(
-                labelText: 'Send a message...',
-              ),
+              decoration: const InputDecoration(labelText: 'Send a message...'),
             ),
           ),
           IconButton(
             color: Theme.of(context).colorScheme.primary,
+            icon: const Icon(
+              Icons.send,
+            ),
             onPressed: _submitMessage,
-            icon: const Icon(Icons.send),
           ),
         ],
       ),

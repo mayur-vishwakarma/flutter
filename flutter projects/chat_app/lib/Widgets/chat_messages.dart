@@ -1,4 +1,4 @@
-import 'package:chat_app/Widgets/message_bubble.dart';
+import 'package:chat_app/widgets/message_bubble.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -18,23 +18,27 @@ class ChatMessages extends StatelessWidget {
             descending: true,
           )
           .snapshots(),
-      builder: (ctx, chatSnapShots) {
-        if (chatSnapShots.connectionState == ConnectionState.waiting) {
+      builder: (ctx, chatSnapshots) {
+        if (chatSnapshots.connectionState == ConnectionState.waiting) {
           return const Center(
             child: CircularProgressIndicator(),
           );
         }
-        if (!chatSnapShots.hasData || chatSnapShots.data!.docs.isEmpty) {
+
+        if (!chatSnapshots.hasData || chatSnapshots.data!.docs.isEmpty) {
           return const Center(
-            child: Text("No Messages found..."),
+            child: Text('No messages found.'),
           );
         }
-        if (chatSnapShots.hasError) {
+
+        if (chatSnapshots.hasError) {
           return const Center(
-            child: Text("SomeThing Went Wrong..."),
+            child: Text('Something went wrong...'),
           );
         }
-        final loadedMessages = chatSnapShots.data!.docs;
+
+        final loadedMessages = chatSnapshots.data!.docs;
+
         return ListView.builder(
           padding: const EdgeInsets.only(
             bottom: 40,
@@ -43,11 +47,12 @@ class ChatMessages extends StatelessWidget {
           ),
           reverse: true,
           itemCount: loadedMessages.length,
-          itemBuilder: ((context, index) {
+          itemBuilder: (ctx, index) {
             final chatMessage = loadedMessages[index].data();
             final nextChatMessage = index + 1 < loadedMessages.length
                 ? loadedMessages[index + 1].data()
                 : null;
+
             final currentMessageUserId = chatMessage['userId'];
             final nextMessageUserId =
                 nextChatMessage != null ? nextChatMessage['userId'] : null;
@@ -55,16 +60,18 @@ class ChatMessages extends StatelessWidget {
 
             if (nextUserIsSame) {
               return MessageBubble.next(
-                  message: chatMessage['text'],
-                  isMe: authenticatedUser.uid == currentMessageUserId);
+                message: chatMessage['text'],
+                isMe: authenticatedUser.uid == currentMessageUserId,
+              );
             } else {
               return MessageBubble.first(
-                  userImage: chatMessage['userImage'],
-                  username: chatMessage['username'],
-                  message: chatMessage['text'],
-                  isMe: authenticatedUser.uid == currentMessageUserId);
+                userImage: chatMessage['userImage'],
+                username: chatMessage['username'],
+                message: chatMessage['text'],
+                isMe: authenticatedUser.uid == currentMessageUserId,
+              );
             }
-          }),
+          },
         );
       },
     );
