@@ -2,8 +2,13 @@ import 'package:bmi_calculator/assets/constants.dart';
 import 'package:flutter/Material.dart';
 
 class HeightSelector extends StatefulWidget {
-  HeightSelector({super.key, required this.height});
+  HeightSelector({
+    super.key,
+    required this.height,
+    required this.onHeightChanged,
+  });
   int? height;
+  final Function(int) onHeightChanged;
 
   @override
   State<HeightSelector> createState() => _HeightSelectorState();
@@ -54,7 +59,7 @@ class _HeightSelectorState extends State<HeightSelector> {
                 max: 220.0,
                 onChanged: (double newValue) {
                   setState(() {
-                    widget.height = newValue.round();
+                    widget.onHeightChanged(newValue.round());
                   });
                 }),
           ),

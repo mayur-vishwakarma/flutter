@@ -22,25 +22,28 @@ class InputPage extends StatefulWidget {
 
 class _InputPageState extends State<InputPage> {
   Gender? selectedGender;
-  int selectedheight = 180;
-  int selectedWeight = 50;
+  int selectedheight = 160;
+  int selectedWeight = 60;
   int selectedAge = 20;
 
   @override
   Widget build(BuildContext context) {
     void ontap() {
+      print("$selectedWeight    -    $selectedheight");
       CalculatorBrain calc =
           CalculatorBrain(height: selectedheight, weight: selectedWeight);
       selectedGender ??= Gender.male;
-
+      String bmi = calc.calculateBmi();
+      String interpretation = calc.getInterpretation();
+      String resultText = calc.getResult();
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (ctx) {
             return ResultPage(
-              bmiResult: calc.calculateBmi(),
-              interpretation: calc.getInterpretation(),
-              resultText: calc.getResult(),
+              bmiResult: bmi,
+              interpretation: interpretation,
+              resultText: resultText,
             );
           },
         ),
@@ -69,9 +72,14 @@ class _InputPageState extends State<InputPage> {
                       colour: selectedGender == Gender.male
                           ? kActiveCardColour
                           : kInActiveCardColour,
-                      cardChild: const GenderSelection(
+                      cardChild: GenderSelection(
                         label: 'MALE',
-                        genderIcon: Icon(FontAwesomeIcons.mars),
+                        genderIcon: const Icon(FontAwesomeIcons.mars),
+                        onGenderSelected: (Gender gender) {
+                          setState(() {
+                            selectedGender = gender;
+                          });
+                        },
                       ),
                     ),
                   ),
@@ -87,9 +95,14 @@ class _InputPageState extends State<InputPage> {
                       colour: selectedGender == Gender.female
                           ? kActiveCardColour
                           : kInActiveCardColour,
-                      cardChild: const GenderSelection(
+                      cardChild: GenderSelection(
                         label: "FEMALE",
-                        genderIcon: Icon(FontAwesomeIcons.venus),
+                        genderIcon: const Icon(FontAwesomeIcons.venus),
+                        onGenderSelected: (Gender gender) {
+                          setState(() {
+                            selectedGender = gender;
+                          });
+                        },
                       ),
                     ),
                   ),
@@ -100,7 +113,13 @@ class _InputPageState extends State<InputPage> {
           Expanded(
             child: ReuseableCard(
               colour: kActiveCardColour,
-              cardChild: HeightSelector(height: selectedheight),
+              cardChild: HeightSelector(
+                  height: selectedheight,
+                  onHeightChanged: (int height) {
+                    setState(() {
+                      selectedheight = height;
+                    });
+                  }),
             ),
           ),
           Expanded(
@@ -109,14 +128,27 @@ class _InputPageState extends State<InputPage> {
                 Expanded(
                   child: ReuseableCard(
                     colour: kActiveCardColour,
-                    cardChild:
-                        WeightAndAge(label: "WEIGHT", value: selectedWeight),
+                    cardChild: WeightAndAge(
+                        label: "WEIGHT",
+                        value: selectedWeight,
+                        onValueChange: (int weight) {
+                          setState(() {
+                            selectedWeight = weight;
+                          });
+                        }),
                   ),
                 ),
                 Expanded(
                   child: ReuseableCard(
                     colour: kActiveCardColour,
-                    cardChild: WeightAndAge(label: "AGE", value: selectedAge),
+                    cardChild: WeightAndAge(
+                        label: "AGE",
+                        value: selectedAge,
+                        onValueChange: (int age) {
+                          setState(() {
+                            selectedAge = age;
+                          });
+                        }),
                   ),
                 ),
               ],

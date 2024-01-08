@@ -3,11 +3,16 @@ import 'package:bmi_calculator/assets/constants.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class WeightAndAge extends StatefulWidget {
-  WeightAndAge({Key? key, required this.value, required this.label})
-      : super(key: key);
+  WeightAndAge({
+    Key? key,
+    required this.value,
+    required this.label,
+    required this.onValueChange,
+  }) : super(key: key);
 
   final String label;
-  int value;
+  int? value;
+  final Function(int) onValueChange;
 
   @override
   State<WeightAndAge> createState() {
@@ -42,7 +47,7 @@ class _WeightAndAgeState extends State<WeightAndAge> {
                 backgroundColor: const Color(0xFF4C4F5E),
                 onPressed: () {
                   setState(() {
-                    ++widget.value;
+                    widget.onValueChange(widget.value = widget.value! + 1);
                   });
                 },
                 child: const Icon(
@@ -57,7 +62,7 @@ class _WeightAndAgeState extends State<WeightAndAge> {
                 backgroundColor: const Color(0xFF4C4F5E),
                 onPressed: () {
                   setState(() {
-                    --widget.value;
+                    widget.onValueChange(widget.value = widget.value! - 1);
                   });
                 },
                 child: const Icon(
