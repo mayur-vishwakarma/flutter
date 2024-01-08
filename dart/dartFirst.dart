@@ -6,6 +6,6 @@ void main() {
   int num1 = int.parse(stdin.readLineSync()!);
   print('Enter end Range');
   int num2 = int.parse(stdin.readLineSync()!);
-  int count = sumOfDigits(num1,num2 );
+  int count = sumOfDigits(num1, num2);
   print(count);
 }
