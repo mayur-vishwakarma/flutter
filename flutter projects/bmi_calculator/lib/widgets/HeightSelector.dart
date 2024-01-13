@@ -2,12 +2,12 @@ import 'package:bmi_calculator/assets/constants.dart';
 import 'package:flutter/Material.dart';
 
 class HeightSelector extends StatefulWidget {
-  HeightSelector({
+  const HeightSelector({
     super.key,
     required this.height,
     required this.onHeightChanged,
   });
-  int? height;
+  final  int? height;
   final Function(int) onHeightChanged;
 
   @override
