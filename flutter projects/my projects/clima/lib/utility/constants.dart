@@ -33,5 +33,5 @@ const kTextFieldInputDecoration = InputDecoration(
   ),
 );
 
-const apikey = "2f13d5278fb4bc33247c57786327b974";
 const api = 'https://api.openweathermap.org/data/2.5/weather';
+const apikey = 'use ur own api key';
