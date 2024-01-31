@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyCej2Ggm2awDN4jXdiqLclwq2NKkmtSVis</string>
+	<key>GCM_SENDER_ID</key>
+	<string>1098292286785</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.flashChat.RunnerTests</string>
+	<key>PROJECT_ID</key>
+	<string>flashchat-5abaf</string>
+	<key>STORAGE_BUCKET</key>
+	<string>flashchat-5abaf.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:1098292286785:ios:17428a5c954f60a54bbdc0</string>
+</dict>
+</plist>
