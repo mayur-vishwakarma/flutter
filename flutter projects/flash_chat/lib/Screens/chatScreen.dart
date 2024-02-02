@@ -1,19 +1,36 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flash_chat/Screens/loginScreen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 final firebase = FirebaseAuth.instance;
+final firestore = FirebaseFirestore.instance;
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
-
-  static String id = "chatScreen";
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  String message = '';
+  String? email = '';
+
+  @override
+  void initState() {
+    super.initState();
+    getCurrentUser();
+  }
+
+  void getCurrentUser() {
+    try {
+      email = firebase.currentUser!.email;
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,9 +45,12 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
         actions: [
           IconButton(
-              onPressed: () async {
-                await firebase.signOut();
-                const LoginScreen();
+              onPressed: () {
+                firebase.signOut();
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const LoginScreen()));
               },
               icon: Icon(
                 Icons.logout_outlined,
@@ -45,7 +65,38 @@ class _ChatScreenState extends State<ChatScreen> {
           child: Column(
             children: [
               Expanded(
-                child: Container(),
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: firestore.collection("message").snapshots(),
+                  builder: (ctx, snapshot) {
+                    if (snapshot.hasData) {
+                      final mes = snapshot.data!.docs;
+                      List<Widget> messageLists = [];
+                      for (var mess in mes) {
+                        final Map<String, dynamic>? messageData =
+                            mess.data() as Map<String, dynamic>?;
+
+                        if (messageData != null) {
+                          final messageText = messageData['text'];
+                          final messageSender = messageData['sender'];
+
+                          if (messageText != null && messageSender != null) {
+                            final messageList =
+                                Text("$messageText from $messageSender");
+                            messageLists.add(messageList);
+                          }
+                        }
+                      }
+                      
+                      return Column(
+                        children: messageLists,
+                      );
+                    } else {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                  },
+                ),
               ),
               Row(
                 children: [
@@ -76,6 +127,9 @@ class _ChatScreenState extends State<ChatScreen> {
                             ),
                           ),
                         ),
+                        onChanged: (value) {
+                          message = value;
+                        },
                       ),
                     ),
                   ),
@@ -88,9 +142,19 @@ class _ChatScreenState extends State<ChatScreen> {
                       ),
                     ),
                     child: IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          firestore.collection("message").add(
+                                ({
+                                  'sender': email,
+                                  'text': message,
+                                }),
+                              );
+                          setState(() {
+                            message = "";
+                          });
+                        },
                         icon: const Icon(
-                          Icons.send,
+                          Icons.send_outlined,
                           color: Colors.amber,
                         )),
                   )

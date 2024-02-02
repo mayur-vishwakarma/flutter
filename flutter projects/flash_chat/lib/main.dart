@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flash_chat/Screens/welcomeScreen.dart';
 import 'package:flash_chat/Screens/chatScreen.dart';
 
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
