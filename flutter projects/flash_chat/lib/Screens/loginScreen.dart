@@ -1,8 +1,11 @@
 import 'package:flash_chat/components/ele_button.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flash_chat/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_chat/Screens/chatScreen.dart';
 //import 'package:flash_chat/Screens/RegistrationScreen.dart';
+
+final _auth = FirebaseAuth.instance;
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -16,6 +19,35 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   String email = '';
   String password = '';
+
+  void login() async {
+    if (password.length <= 6) {
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            "Password must be longer than 6 characters...",
+          ),
+        ),
+      );
+    }
+
+    try {
+      await _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+    } on FirebaseAuthException catch (e) {
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.message!),
+        ),
+      );
+    }
+    const ChatScreen();
+    Navigator.pop(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +109,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       password = value;
                     },
                     keyboardType: TextInputType.visiblePassword,
-                    
                     textAlign: TextAlign.center,
                     style: TextStyle(color: Colors.amber.shade900),
                     obscureText: true,
@@ -97,7 +128,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   Buttons(
                     buttonName: "Login",
                     onpress: () {
-                      Navigator.pushNamed(context, ChatScreen.id);
+                      login();
+                      
                     },
                   ),
                 ],

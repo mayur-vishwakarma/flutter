@@ -25,7 +25,10 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        return macos;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for macos - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -67,14 +70,5 @@ class DefaultFirebaseOptions {
     projectId: 'flashchat-5abaf',
     storageBucket: 'flashchat-5abaf.appspot.com',
     iosBundleId: 'com.example.flashChat',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyCej2Ggm2awDN4jXdiqLclwq2NKkmtSVis',
-    appId: '1:1098292286785:ios:17428a5c954f60a54bbdc0',
-    messagingSenderId: '1098292286785',
-    projectId: 'flashchat-5abaf',
-    storageBucket: 'flashchat-5abaf.appspot.com',
-    iosBundleId: 'com.example.flashChat.RunnerTests',
   );
 }

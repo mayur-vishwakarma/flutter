@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flash_chat/Screens/loginScreen.dart';
 import 'package:flutter/material.dart';
+
+final firebase = FirebaseAuth.instance;
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
@@ -12,28 +14,11 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  final _auth = FirebaseAuth.instance;
-  var loggedInuser;
-
-  @override
-  void initState() {
-    super.initState();
-    getCurrentuser();
-  }
-
-  void getCurrentuser() async {
-    final user = await _auth.currentUser;
-    if (user != null) {
-      loggedInuser = User;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.amber.shade50,
       appBar: AppBar(
-        leading: null,
         backgroundColor: Colors.amber.shade100,
         title: Center(
           child: Text(
@@ -43,8 +28,9 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
         actions: [
           IconButton(
-              onPressed: () {
-                Navigator.pop(context);
+              onPressed: () async {
+                await firebase.signOut();
+                const LoginScreen();
               },
               icon: Icon(
                 Icons.logout_outlined,

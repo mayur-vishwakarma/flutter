@@ -1,9 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flash_chat/Screens/chatScreen.dart';
 import 'package:flash_chat/components/ele_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_chat/constant.dart';
+
+final _auth = FirebaseAuth.instance;
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({super.key});
@@ -18,21 +19,34 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   String name = '';
   String email = '';
   String password = '';
-  final _auth = FirebaseAuth.instance;
-
-  @override
-  void initState() {
-    super.initState();
-    if (Firebase.apps.isEmpty) {
-      Firebase.initializeApp();
-    }
-  }
 
   void register() async {
-    await _auth.createUserWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
+    if (password.length <= 6) {
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            "Password must be longer than 6 characters...",
+          ),
+        ),
+      );
+    }
+
+    try {
+      await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+    } on FirebaseAuthException catch (e) {
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.message!),
+        ),
+      );
+    }
+    const ChatScreen();
+    Navigator.pop(context);
   }
 
   @override
@@ -137,7 +151,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     buttonName: "Register",
                     onpress: () {
                       register();
-                      Navigator.pushNamed(context, ChatScreen.id);
                     },
                   ),
                 ],

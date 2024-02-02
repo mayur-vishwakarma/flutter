@@ -4,6 +4,7 @@ class Buttons extends StatelessWidget {
   const Buttons({super.key, required this.buttonName, required this.onpress});
   final String buttonName;
   final Function onpress;
+
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
@@ -20,6 +21,7 @@ class Buttons extends StatelessWidget {
       ),
       onPressed: () {
         onpress();
+        FocusScope.of(context).unfocus();
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 40),

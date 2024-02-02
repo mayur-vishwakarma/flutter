@@ -85,18 +85,34 @@ class _WelcomeScreenState extends State<WelcomeScreen>
               height: 30,
             ),
             Buttons(
-                buttonName: "Login",
-                onpress: () {
-                  Navigator.pushNamed(context, LoginScreen.id);
-                }),
+              buttonName: "Login",
+              onpress: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (ctx) {
+                      return const LoginScreen();
+                    },
+                  ),
+                );
+              },
+            ),
             const SizedBox(
               height: 20,
             ),
             Buttons(
-                buttonName: "Register",
-                onpress: () {
-                  Navigator.pushNamed(context, RegistrationScreen.id);
-                }),
+              buttonName: "Register",
+              onpress: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (ctx) {
+                      return const RegistrationScreen();
+                    },
+                  ),
+                );
+              },
+            ),
           ],
         ),
       ),
