@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flash_chat/Screens/loginScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flash_chat/components/MessageStream.dart';
 
 final firebase = FirebaseAuth.instance;
 final firestore = FirebaseFirestore.instance;
@@ -16,6 +17,7 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   String message = '';
   String? email = '';
+  final messageTextController = TextEditingController();
 
   @override
   void initState() {
@@ -64,46 +66,14 @@ class _ChatScreenState extends State<ChatScreen> {
         child: Center(
           child: Column(
             children: [
-              Expanded(
-                child: StreamBuilder<QuerySnapshot>(
-                  stream: firestore.collection("message").snapshots(),
-                  builder: (ctx, snapshot) {
-                    if (snapshot.hasData) {
-                      final mes = snapshot.data!.docs;
-                      List<Widget> messageLists = [];
-                      for (var mess in mes) {
-                        final Map<String, dynamic>? messageData =
-                            mess.data() as Map<String, dynamic>?;
-
-                        if (messageData != null) {
-                          final messageText = messageData['text'];
-                          final messageSender = messageData['sender'];
-
-                          if (messageText != null && messageSender != null) {
-                            final messageList =
-                                Text("$messageText from $messageSender");
-                            messageLists.add(messageList);
-                          }
-                        }
-                      }
-                      
-                      return Column(
-                        children: messageLists,
-                      );
-                    } else {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                  },
-                ),
-              ),
+              MessageStream(email: email!),
               Row(
                 children: [
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: TextField(
+                        controller: messageTextController,
                         style: TextStyle(color: Colors.amber.shade900),
                         decoration: InputDecoration(
                           label: Text(
@@ -143,15 +113,13 @@ class _ChatScreenState extends State<ChatScreen> {
                     ),
                     child: IconButton(
                         onPressed: () {
+                          messageTextController.clear();
                           firestore.collection("message").add(
                                 ({
                                   'sender': email,
                                   'text': message,
                                 }),
                               );
-                          setState(() {
-                            message = "";
-                          });
                         },
                         icon: const Icon(
                           Icons.send_outlined,

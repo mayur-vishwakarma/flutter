@@ -21,7 +21,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   String password = '';
 
   void register() async {
-    if (password.length <= 6) {
+    if (password.length < 6) {
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -45,8 +45,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         ),
       );
     }
-    const ChatScreen();
-    Navigator.pop(context);
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (ctx) {
+          return ChatScreen();
+        },
+      ),
+    );
   }
 
   @override
