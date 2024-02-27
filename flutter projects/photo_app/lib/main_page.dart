@@ -26,8 +26,6 @@ class _MainPageState extends State<MainPage> {
         ImageModel(data['id'], data['url'], data['title']));
     });
   } else {
-    // Handle error here
-    print('Failed to load image');
   }
 }
 
